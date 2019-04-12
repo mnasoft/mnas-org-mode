@@ -33,19 +33,27 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defparameter *date-sample* "<2019-01-12 Сб>")
-(defparameter *time-sample* "08:59:35")
+(defparameter *date-sample*          "<2019-01-12 Сб>")
+(defparameter *date-sample-wrong-01* "<2019-01-12>")
+(defparameter *date-sample-wrong-02* "2019-01-12")
+(defparameter *time-sample*          "08:59:35")
 
 (defun date->date (org-date)
   "Выполняет преобразование даты в формате org-mode в список чисел.
-Пример использования:
- (date->date *date-sample*) -> (2019 1 12)
+Примеры использования:
+ (date->date *date-sample*)          -> (2019 1 12)
+ (date->date *date-sample-wrong-01*) -> (2019 1 12)
+ (date->date *date-sample-wrong-02*) -> (2019 1 12)
 "
   (declare ((or string) org-date))
-  (mapcar #'parse-integer (nreverse(cdr(nreverse(cdr (cl-ppcre:split "^<|-| |>$" org-date)))))))
+  (let* ((s-lst (cdr (cl-ppcre:split "^<|-| |>$" "<2019-01-12 Сб>")))
+	 (year  (parse-integer (first s-lst)))
+	 (month (parse-integer (second s-lst)))
+         (day   (parse-integer (third s-lst))))
+    (list year month day)))
 
 (defun time->time (org-time)
-    "Выполняет преобразование времени в формате org-mode в список чисел.
+  "Выполняет преобразование времени в формате org-mode в список чисел.
 Пример использования:
  (time->time *time-sample*) => (8 59 35)"
   (declare ((or string) org-time))
@@ -56,6 +64,9 @@
 Пример использования:
   (date-time->utime *date-sample* *time-sample*) => 3756265175
 "
+  ;; (date-time->utime "<2019-02-07 Чт>" "09:34:30")
+  ;; (date-time->utime "<2019-02-07>"    "10:35:39")
+  ;; (date->date "<2019-02-07>")
   (declare ((or string) date time))
   (append (date->date date) (time->time time))
   (apply #'encode-universal-time (nreverse (append (date->date date) (time->time time)))))
