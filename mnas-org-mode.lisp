@@ -34,19 +34,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defparameter *date-sample*          "<2019-01-12 Сб>")
-(defparameter *date-sample-wrong-01* "<2019-01-12>")
-(defparameter *date-sample-wrong-02* "2019-01-12")
+(defparameter *date-sample-wrong-01* "<2018-02-15>")
+(defparameter *date-sample-wrong-02* "<2017-03-18>")
 (defparameter *time-sample*          "08:59:35")
 
 (defun date->date (org-date)
   "Выполняет преобразование даты в формате org-mode в список чисел.
 Примеры использования:
  (date->date *date-sample*)          -> (2019 1 12)
- (date->date *date-sample-wrong-01*) -> (2019 1 12)
- (date->date *date-sample-wrong-02*) -> (2019 1 12)
+ (date->date *date-sample-wrong-01*) -> (2018 2 15)
+ (date->date *date-sample-wrong-02*) -> (2017 3 18)
 "
   (declare ((or string) org-date))
-  (let* ((s-lst (cdr (cl-ppcre:split "^<|-| |>$" "<2019-01-12 Сб>")))
+  (let* ((s-lst (cdr (cl-ppcre:split "^<|-| |>$" org-date)))
 	 (year  (parse-integer (first s-lst)))
 	 (month (parse-integer (second s-lst)))
          (day   (parse-integer (third s-lst))))
@@ -81,11 +81,12 @@
   "Преобразует универсальное время в формат даты org-mode.
 Пример использования:
  (utime->date 3756265175) => \"<2019-1-12 Сб>\"
+ (utime->date 3756265175) 
 "
   (declare ((or integer) utime))
   (multiple-value-bind (ss mm hh dd mon yy w-day) (decode-universal-time utime)
       (declare (ignore  ss mm hh ))
-    (format nil "<~A-~A-~A ~A>" yy mon dd (day-of-week w-day))))
+      (format nil "<~4,'0D-~2,'0D-~2,'0D ~A>" yy mon dd (day-of-week w-day))))
 
 (defun utime->time (utime)
   "Преобразует универсальное время в формат времени (не совсем org-mode).
