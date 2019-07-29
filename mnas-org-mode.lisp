@@ -73,13 +73,19 @@
 
 ;;;;
 
-(defparameter *day-of-week* '((0 "Пн") (1 "Вт") (2 "Ср") (3 "Чт") (4 "Пт") (5 "Сб") (6 "Вс")))
+(defparameter *day-of-week*    '((0 "Пн") (1 "Вт") (2 "Ср") (3 "Чт") (4 "Пт") (5 "Сб") (6 "Вс")))
+
+
+(defparameter *day-of-week-en* '((0 "Mo") (1 "Tu") (2 "We") (3 "Th") (4 "Fr") (5 "Sa") (6 "Su")))
+(defparameter *day-of-week-ru* '((0 "Пн") (1 "Вт") (2 "Ср") (3 "Чт") (4 "Пт") (5 "Сб") (6 "Вс")))
+(defparameter *day-of-week-ua* '((0 "Пн") (1 "Вт") (2 "Ср") (3 "Чт") (4 "Пт") (5 "Сб") (6 "Нд")))
 
 (defun day-of-week (numder) (cadr (assoc numder *day-of-week*)))
 
 (defun utime->date (utime)
   "Преобразует универсальное время в формат даты org-mode.
 Пример использования:
+ (decode-universal-time 3756265175)
  (utime->date 3756265175) => \"<2019-1-12 Сб>\"
  (utime->date 3756265175) 
 "
@@ -96,6 +102,6 @@
   (declare ((or integer) utime))
   (multiple-value-bind (ss mm hh dd mon yy w-day) (decode-universal-time utime)
     (declare (ignore  dd mon yy w-day ))
-    (format nil "~2,'0D:~2,'0D:~D" hh mm ss)))
+    (format nil "~2,'0D:~2,'0D:~2,'0D" hh mm ss)))
 
 
