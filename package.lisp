@@ -24,3 +24,5 @@
 	   mnas-org-mode::day-of-week
 	   mnas-org-mode::utime->date
 	   mnas-org-mode::utime->time))
+
+;;;; (declaim (optimize (compilation-speed 0) (debug 3) (safety 0) (space 0) (speed 0)))
