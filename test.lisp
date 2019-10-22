@@ -19,43 +19,7 @@
     (second (first (encode-string str)))))
 
 (defun read-line-trim (is &optional (char-bag " "))
-  (string-trim " " (read-line *is*)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require :str)
-
-(defparameter *is* (open "d:/PRG/msys32/home/namatv/struct.org" :external-format :utf8))
-
-(defparameter *rez* nil)
-
-(let* ((str (read-line-trim *is*))
-       (lvl (org-level str)))
-  (defparameter *str* str)
-  (defparameter *lvl* lvl))
-
-(when (= *lvl* 1)
-  (push (list *str* ()) *rez*))
-
-
-(defun split-by-level (lst level)
-  )
-
-
-(defun foo (is )
-  (let ((rez nil))
-    
-    ))
-
-(org-level (read-line-trim *is*))
-
-(with-open-file (is "d:/PRG/msys32/home/namatv/struct.org")
-  (do ((rez nil))
-      
-
-      )
-  )
-
+  (string-trim char-bag (read-line is)))
 
 (defun read-file-line-by-line (file)
   (let ((rez nil))
@@ -84,7 +48,11 @@
 	(push itm rez)
 	(setf itm nil)))
     (nreverse rez)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require :str)
+
+(defparameter *is* (open "d:/PRG/msys32/home/namatv/struct.org" :external-format :utf8))
 
 (org-split-list-by-level
  (map 'list
@@ -94,4 +62,4 @@
  1)
 
 
-(org-split-list-by-level (lst lvl)
+
