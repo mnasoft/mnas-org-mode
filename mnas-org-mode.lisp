@@ -104,7 +104,9 @@
     (declare (ignore  dd mon yy w-day ))
     (format nil "~2,'0D:~2,'0D:~2,'0D" hh mm ss)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(export 'table-to-org)
+(defun table-to-org (table &optional (stream t))
+  "Экспотр таблицы в формат Org"
+  (format stream "~{~{|~S~}|~%~}" table))
 
 
