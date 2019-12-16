@@ -95,9 +95,14 @@
       (format nil "<~4,'0D-~2,'0D-~2,'0D ~A>" yy mon dd (day-of-week w-day))))
 
 (defun utime->time (utime)
-  "Преобразует универсальное время в формат времени (не совсем org-mode).
-Пример использования:
+  "@b(Описание:) utime->time преобразует универсальное время в строковое представление времени ΗΗ:MM:SS (не совсем org-mode).
+
+@b(Пример использования:)
+@begin[lang=lisp](code)
+
+@end(code)
  (utime->time 3756265175) => \"08:59:35\"
+Пример использования:
 "
   (declare ((or integer) utime))
   (multiple-value-bind (ss mm hh dd mon yy w-day) (decode-universal-time utime)
@@ -106,7 +111,24 @@
 
 (export 'table-to-org)
 (defun table-to-org (table &optional (stream t))
-  "Экспотр таблицы в формат Org"
+  "@b(Описание:) table-to-org экспортирует таблицу в формат Org.
+
+@b(Переменые:)
+@begin(list)
+ @item(table  - 2d список;)
+ @item(stream - поток вывода.)
+@end(list)
+ &optional ( t))
+
+@b(Пример использования:)
+@begin[lang=lisp](code)
+ (table-to-org '((1  2 3)(3 4 5)(5 6 7))) 
+ =>
+ ;;;; |1|2|3|
+ ;;;; |3|4|5|
+ ;;;; |5|6|7|
+@end(code)
+"
   (format stream "~{~{|~S~}|~%~}" table))
 
 
