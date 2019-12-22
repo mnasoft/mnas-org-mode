@@ -7,10 +7,11 @@
 (defparameter *d-sample* "2019-01-12 08:25:08.trd")
 
 (defun hiper-link->link (h-link)
-  "Возвращает ссылочную часть ссылки, заданной в формате org-mode.
-Пример использования:
-Пример использования:
+  "@b(Описание:) hiper-link->link возвращает ссылочную часть ссылки, заданной в формате org-mode.
+@b(Пример использования:)
+@begin[lang=lisp](code)
  (mnas-org-mode:hiper-link->link mnas-org-mode::*hl-sample*) => \"D:/home/_namatv/_WorkPlan/2019/32/2019-01-12_082508.trd\"
+@end(code)
 "
   (declare ((or string) h-link))
   (string-trim "[]" (cl-ppcre:scan-to-strings "^\\[\\[.*\\]\\[" h-link)))
