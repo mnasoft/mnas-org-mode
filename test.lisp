@@ -60,6 +60,3 @@
 	  (string-trim " " el))
       (read-file-line-by-line "d:/PRG/msys32/home/namatv/struct.org"))
  1)
-
-
-
