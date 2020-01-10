@@ -1,0 +1,46 @@
+* Операции git [[file:~/org/sbcl/Git-memo.org][Git-memo.org]]
+* Генерирование документации при помощи Codex
+
+ http://commondoc.github.io/codex/docs/tutorial.html
+
+ [[file:~/org/sbcl/codex.org][Codex]]
+
+* Пример генерирования документации
+#+name: pwd
+#+BEGIN_SRC shell
+pwd
+#+END_SRC
+
+#+RESULTS: pwd
+: /home/namatv/quicklisp/local-projects/mnas/mnas-org-mode
+
+#+name: basename-pwd
+#+BEGIN_SRC shell
+basename `pwd`
+#+END_SRC
+
+#+RESULTS: basename-pwd
+: mnas-string
+
+#+BEGIN_SRC lisp :var pwd=pwd :var basename-pwd=basename-pwd
+  ;;;; (require :codex)
+  ;;;; (require :mnas-package)
+  ;;;;
+  ;;;; (require :mnas-org-mode)
+  (let ((pkg :mnas-org-mode)
+	(fpath (concatenate
+		'string
+		(cond ((uiop:getenv "MSYS_HOME")) (t ""))
+		pwd "/docs/build/"
+		basename-pwd "/html/")))
+    (codex:document pkg)
+    (mnas-package:package-call-graph   pkg :out-type "png" :viewer nil :fpath fpath :fname "call-graph")
+    (mnas-package:package-system-graph pkg :out-type "png" :viewer nil :fpath fpath :fname "system-graph")
+    (mnas-package:package-class-graph  pkg :out-type "png" :viewer nil :fpath fpath :fname "class-graph")
+    (mnas-package:package-symbol-graph pkg :out-type "png" :viewer nil :fpath fpath :fname "symbol-graph"))
+#+END_SRC
+
+#+RESULTS:
+: #GRAPH(VC=12 RC=1)
+: (T:"day-of-week" T:"*date-sample-wrong-01*" T:"*date-sample-wrong-02*" T:"*day-of-week-en*" T:"*date-sample*" T:"*day-of-week*" T:"*l-sample*" T:"*day-of-week-ua*" T:"*d-sample*" T:"*day-of-week-ru*" T:"*time-sample*" T:"*hl-sample*" )
+: ((T:"day-of-week"->T:"*day-of-week*") ))
