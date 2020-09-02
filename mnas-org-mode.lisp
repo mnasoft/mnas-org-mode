@@ -2,8 +2,6 @@
 
 (in-package #:mnas-org-mode)
 
-(annot:enable-annot-syntax)
-
 (defparameter *hl-sample* "[[D:/home/_namatv/_WorkPlan/2019/32/2019-01-12_082508.trd][2019-01-12 08:25:08.trd]]"
   "Пример гиперссылки в формате org.")
 
@@ -25,8 +23,8 @@
 (defparameter *time-sample*          "08:59:35"
   "Пример времени.")
 
-@export
-@annot.doc:doc
+(export 'hiper-link->link )
+(defun hiper-link->link (h-link)
 "@b(Описание:) hiper-link->link возвращает ссылочную часть ссылки, заданной в формате org-mode.
 
  @b(Пример использования:)
@@ -34,22 +32,20 @@
  (mnas-org-mode:hiper-link->link mnas-org-mode::*hl-sample*) => \"D:/home/_namatv/_WorkPlan/2019/32/2019-01-12_082508.trd\"
 @end(code)
 "
-(defun hiper-link->link (h-link)
   (declare ((or string) h-link))
   (string-trim "[]" (cl-ppcre:scan-to-strings "^\\[\\[.*\\]\\[" h-link)))
 
-@export
-@annot.doc:doc
+(export 'hiper-link->description )
+(defun hiper-link->description (h-link)
 "Возвращает описательную часть ссылки, заданной в формате org-mode.
 Пример использования:
  (mnas-org-mode:hiper-link->description mnas-org-mode::*hl-sample*) => \"2019-01-12 08:25:08.trd\"
 "
-(defun hiper-link->description (h-link)
   (declare ((or string) h-link))
   (string-trim "[]" (cl-ppcre:scan-to-strings "\\]\\[.*\\]\\]$" h-link)))
 
-@export
-@annot.doc:doc
+(export 'make-hiper-link )
+(defun make-hiper-link (link description)
 "Формирует ссылку в формате org-mode.
 
  @b(Пример использования:)
@@ -58,12 +54,11 @@
  \"[[D:/home/_namatv/_WorkPlan/2019/32/2019-01-12_082508.trd][2019-01-12 08:25:08.trd]]\"
 @end(code)
 "
-(defun make-hiper-link (link description)
   (declare ((or string) link description))
   (format nil "[[~A][~A]]" link description))
 
-@export
-@annot.doc:doc
+(export 'date->date )
+(defun date->date (org-date)
 "@b(Описание:) date->date выполняет преобразование даты в 
 формате org-mode в список чисел.
 
@@ -74,7 +69,6 @@
  (date->date *date-sample-wrong-02*) -> (2017 3 18)
 @end(code)
 "
-(defun date->date (org-date)
   (declare ((or string) org-date))
   (let* ((s-lst (cdr (cl-ppcre:split "^<|-| |>$" org-date)))
 	 (year  (parse-integer (first s-lst)))
@@ -82,7 +76,7 @@
          (day   (parse-integer (third s-lst))))
     (list year month day)))
 
-@export
+(export 'time->time )
 (defun time->time (org-time)
   "Выполняет преобразование времени в формате org-mode в список чисел.
 Пример использования:
@@ -90,8 +84,8 @@
   (declare ((or string) org-time))
   (mapcar #'parse-integer (cl-ppcre:split ":" org-time)))
 
-@export
-@annot.doc:doc
+(export 'date-time->utime )
+(defun date-time->utime (date time)
   "@b(Описание:) date-time->utime возвращает ссылочную часть ссылки, 
 заданной в формате org-mode.
 
@@ -103,7 +97,6 @@
   (date->date \"<2019-02-07>\")
 @end(code)
 "
-(defun date-time->utime (date time)
   (declare ((or string) date time))
   (append (date->date date) (time->time time))
   (apply #'encode-universal-time (nreverse (append (date->date date) (time->time time)))))
@@ -120,8 +113,8 @@
 (defparameter *day-of-week*  *day-of-week-ru*
   "Короткие наименования дней недели на текущем языке.")
 
-@export
-@annot.doc:doc
+(export 'day-of-week )
+(defun day-of-week (number)
 "@b(Описание:) day-of-week возвращает короткое строковое представление дня недели 
 по номеру дня.
 
@@ -134,11 +127,9 @@
 (day-of-week 6) => \"Вс\"
 @end(code)
 "
-(defun day-of-week (number) (cadr (assoc number *day-of-week*)))
-
-
-@export
-@annot.doc:doc
+ (cadr (assoc number *day-of-week*)))
+(export 'utime->date )
+(defun utime->date (utime)
 "@b(Описание:) utime->date преобразует универсальное время @b(utime) 
 в формат даты org-mode.
 
@@ -148,15 +139,13 @@
  (utime->date 3756265175) => \"<2019-1-12 Сб>\"
 @end(code)
 "
-(defun utime->date (utime)
-  
   (declare ((or integer) utime))
   (multiple-value-bind (ss mm hh dd mon yy w-day) (decode-universal-time utime)
       (declare (ignore  ss mm hh ))
       (format nil "<~4,'0D-~2,'0D-~2,'0D ~A>" yy mon dd (day-of-week w-day))))
 
-@export
-@annot.doc:doc
+(export 'utime->time )
+(defun utime->time (utime)
 "@b(Описание:) utime->time преобразует универсальное время в строковое представление времени ΗΗ:MM:SS (не совсем org-mode).
 
  @b(Пример использования:)
@@ -164,14 +153,13 @@
  (utime->time 3756265175) => \"08:59:35\"
 @end(code)
 "
-(defun utime->time (utime)
   (declare ((or integer) utime))
   (multiple-value-bind (ss mm hh dd mon yy w-day) (decode-universal-time utime)
     (declare (ignore  dd mon yy w-day ))
     (format nil "~2,'0D:~2,'0D:~2,'0D" hh mm ss)))
 
-@export
-@annot.doc:doc
+(export 'table-to-org )
+(defun table-to-org (table &optional (stream t))
 "@b(Описание:) table-to-org экспортирует таблицу в формат Org.
 
  @b(Переменые:)
@@ -188,5 +176,4 @@
  |5|6|7|
 @end(code)
 "
-(defun table-to-org (table &optional (stream t))
   (format stream "~{~{|~S~}|~%~}" table))
