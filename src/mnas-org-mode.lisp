@@ -172,6 +172,12 @@
     (declare (ignore  dd mon yy w-day ))
     (format nil "~2,'0D:~2,'0D:~2,'0D" hh mm ss)))
 
+(export 'utime->date-time)
+
+(defun utime->date-time (utime)
+  (list (utime->date utime)
+	(utime->time utime)))
+
 (export 'table-to-org )
 
 (defun table-to-org (table &optional (stream t))

@@ -10,7 +10,9 @@
    utime->time
    hiper-link->description
    date-time->utime
-   time->time)
+   time->time
+   utime->date-time
+   )
   )
 
 ;;;; (declaim (optimize (compilation-speed 0) (debug 3) (safety 0) (space 0) (speed 0)))
