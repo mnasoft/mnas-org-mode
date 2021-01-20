@@ -1,5 +1,23 @@
 ;;;; mnas-org-mode.lisp
 
+(defpackage #:mnas-org-mode
+  (:use #:cl)
+  (:export utime->date
+           make-hiper-link
+           day-of-week date->date
+           hiper-link->link
+           table-to-org
+           utime->time
+           hiper-link->description
+           date-time->utime
+           time->time
+           utime->date-time
+           org-date-time->utime))
+
+;;;; (declaim (optimize (compilation-speed 0) (debug 3) (safety 0) (space 0) (speed 0)))
+
+(setf sb-impl::*default-external-format* :utf8)
+
 (in-package #:mnas-org-mode)
 
 (defparameter *hl-sample* "[[D:/home/_namatv/_WorkPlan/2019/32/2019-01-12_082508.trd][2019-01-12 08:25:08.trd]]"
@@ -21,6 +39,9 @@
   "Пример даты, содержащий ошибку (отсутстсует день недели).")
 
 (defparameter *time-sample*          "08:59:35"
+  "Пример времени.")
+
+(defparameter *date-time-sample* "<2021-01-14 Чт 10:35>"
   "Пример времени.")
 
 (export 'hiper-link->link )
@@ -110,6 +131,25 @@
   (declare ((or string) date time))
   (append (date->date date) (time->time time))
   (apply #'encode-universal-time (nreverse (append (date->date date) (time->time time)))))
+
+(defun org-date-time->utime (date-time)
+  "@b(Описание:) функция @b(org-date-time->utime) возвращает универсальное время.
+
+ @b(Переменые:)
+@begin(list)
+@iterm(date-time - строка, содержащая дату и время в формате org.) 
+@end(list)
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (org-date-time->utime *date-time-sample*)
+@end(code)
+"
+  (declare ((or string) date-time))
+  (let ((date-day-time (mnas-string:split " []<>" date-time)))
+    (date-time->utime
+     (concatenate 'string "<" (first date-day-time) ">")
+     (concatenate 'string (third date-day-time) ":00"))))
 
 (defparameter *day-of-week-en* '((0 "Mo") (1 "Tu") (2 "We") (3 "Th") (4 "Fr") (5 "Sa") (6 "Su"))
   "Короткие наименования дней недели на английском языке.")
