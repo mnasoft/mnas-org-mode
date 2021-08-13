@@ -1,9 +1,8 @@
-(:docstring-markup-format :scriba
- :systems (:mnas-org-mode)
- :documents ((:title "Mnas-Org-Mode"
-              :authors ("Nick Matvyeyev")
-              :output-format (:type :multi-html
-                              :template :minima)
-              :sources ("mnas-org-mode.scr"
-			"mnas-org-mode-graph.scr"
-			))))
+(:docstring-markup-format
+   :scriba
+   :systems (:MNAS-ORG-MODE :MNAS-ORG-MODE/DOCS)
+   :documents ((:title "Mnas-Org-Mode"
+	        :authors ("Nick Matvyeyev")
+	        :output-format (:TYPE :MULTI-HTML :TEMPLATE :GAMMA) 
+                :sources ("mnas-org-mode.scr" "mnas-org-mode-graph.scr")
+                )))
