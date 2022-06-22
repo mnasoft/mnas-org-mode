@@ -39,7 +39,7 @@
   (mnas-package:make-mainfest-lisp
    '(:mnas-org-mode :mnas-org-mode/docs)
    "Mnas-Org-Mode"
-   '("Nick Matvyeyev")
+   '("Mykola Matvyeyev")
    (mnas-package:find-sources "mnas-org-mode")
    :output-format of)
   (codex:document :mnas-org-mode)
