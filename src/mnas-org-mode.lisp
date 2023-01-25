@@ -12,7 +12,15 @@
            date-time->utime
            time->time
            utime->date-time
-           org-date-time->utime))
+           org-date-time->utime
+           )
+  (:export table-col-by-header
+           table-row-by-header
+           table-cell-by-header
+           table-col-names
+           table-row-names
+           ))
+
 
 ;;;; (declaim (optimize (compilation-speed 0) (debug 3) (safety 0) (space 0) (speed 0)))
 
@@ -238,3 +246,23 @@
 @end(code)
 "
   (format stream "~{~{|~S~}|~%~}" table))
+
+(defun table-col-by-header (col-name table)
+  (let ((pos (position col-name  (first table) :test #'equal)))
+    (cdr
+     (loop :for row :in table
+           :collect
+           (nth pos row)))))
+
+(defun table-row-by-header (row-name table)
+  (cdr (assoc row-name table :test #'equal)))
+
+(defun table-cell-by-header (row-name col-name table)
+  (let ((pos (position col-name  (first table) :test #'equal)))
+    (nth pos (assoc row-name table :test #'equal))))
+
+(defun table-col-names (table)
+  (first table))
+
+(defun table-row-names (table)
+  (loop :for row :in table :collect (first row)))
