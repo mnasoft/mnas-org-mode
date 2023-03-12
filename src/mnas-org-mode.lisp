@@ -1,6 +1,6 @@
 ;;;; mnas-org-mode.lisp
 
-(defpackage #:mnas-org-mode
+(defpackage :mnas-org-mode
   (:use #:cl)
   (:export utime->date
            make-hiper-link
@@ -26,7 +26,7 @@
 
 (setf sb-impl::*default-external-format* :utf8)
 
-(in-package #:mnas-org-mode)
+(in-package :mnas-org-mode)
 
 (defparameter *hl-sample* "[[D:/home/_namatv/_WorkPlan/2019/32/2019-01-12_082508.trd][2019-01-12 08:25:08.trd]]"
   "Пример гиперссылки в формате org.")

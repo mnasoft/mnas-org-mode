@@ -1,6 +1,6 @@
 ;;;; mnas-org-mode.lisp
 
-(in-package #:mnas-org-mode)
+(in-package :mnas-org-mode)
 
 (defun encode-string (str)
   (let ((lst (map 'list #'(lambda (el) el) str))

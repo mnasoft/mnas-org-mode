@@ -1,5 +1,5 @@
 
-(defpackage #:mnas-org-mode/docs
+(defpackage :mnas-org-mode/docs
   (:use #:cl ) 
   (:nicknames "MOMOD/DOCS")
   (:export make-all)
