@@ -3,16 +3,18 @@
 (defpackage :mnas-org-mode
   (:use #:cl)
   (:export utime->date
-           make-hiper-link
-           day-of-week date->date
-           hiper-link->link
+           day-of-week
+           date->date
            table-to-org
            utime->time
-           hiper-link->description
            date-time->utime
            time->time
            utime->date-time
            org-date-time->utime
+           )
+  (:export make-hiper-link
+           hiper-link->link
+           hiper-link->description
            )
   (:export table-col-by-header
            table-row-by-header
@@ -49,8 +51,6 @@
 (defparameter *date-time-sample* "<2021-01-14 Чт 10:35>"
   "Пример времени.")
 
-(export 'hiper-link->link )
-
 (defun hiper-link->link (h-link)
   "@b(Описание:) hiper-link->link возвращает ссылочную часть ссылки, заданной в формате org-mode.
 
@@ -60,9 +60,10 @@
 @end(code)
 "
   (declare ((or string) h-link))
-  (string-trim "[]" (cl-ppcre:scan-to-strings "^\\[\\[.*\\]\\[" h-link)))
-
-(export 'hiper-link->description )
+  (ppcre:regex-replace-all
+   "^file:"
+   (string-trim "[]" (cl-ppcre:scan-to-strings "^\\[\\[.*\\]\\[" h-link))
+  ""))
 
 (defun hiper-link->description (h-link)
   "@b(Описание:) функция @b(hiper-link->description) возвращает описательную часть ссылки,
@@ -75,9 +76,7 @@
 "
   (declare ((or string) h-link))
   (string-trim "[]" (cl-ppcre:scan-to-strings "\\]\\[.*\\]\\]$" h-link)))
-
-(export 'make-hiper-link )
-
+ 
 (defun make-hiper-link (link description)
   "Формирует ссылку в формате org-mode.
 
@@ -89,8 +88,6 @@
 "
   (declare ((or string) link description))
   (format nil "[[~A][~A]]" link description))
-
-(export 'date->date )
 
 (defun date->date (org-date)
   "@b(Описание:) date->date выполняет преобразование даты в 
@@ -110,16 +107,12 @@
          (day   (parse-integer (third s-lst))))
     (list year month day)))
 
-(export 'time->time )
-
 (defun time->time (org-time)
   "Выполняет преобразование времени в формате org-mode в список чисел.
 Пример использования:
  (time->time *time-sample*) => (8 59 35)"
   (declare ((or string) org-time))
   (mapcar #'parse-integer (cl-ppcre:split ":" org-time)))
-
-(export 'date-time->utime )
 
 (defun date-time->utime (date time)
   "@b(Описание:) date-time->utime возвращает ссылочную часть ссылки, 
@@ -168,8 +161,6 @@
 (defparameter *day-of-week*  *day-of-week-ru*
   "Короткие наименования дней недели на текущем языке.")
 
-(export 'day-of-week )
-
 (defun day-of-week (number)
   "@b(Описание:) day-of-week возвращает короткое строковое представление дня недели 
 по номеру дня.
@@ -184,8 +175,6 @@
 @end(code)
 "
   (cadr (assoc number *day-of-week*)))
-
-(export 'utime->date )
 
 (defun utime->date (utime)
   "@b(Описание:) utime->date преобразует универсальное время @b(utime) 
@@ -202,8 +191,6 @@
     (declare (ignore  ss mm hh ))
     (format nil "<~4,'0D-~2,'0D-~2,'0D ~A>" yy mon dd (day-of-week w-day))))
 
-(export 'utime->time )
-
 (defun utime->time (utime)
   "@b(Описание:) utime->time преобразует универсальное время в строковое представление времени ΗΗ:MM:SS (не совсем org-mode).
 
@@ -217,13 +204,9 @@
     (declare (ignore  dd mon yy w-day ))
     (format nil "~2,'0D:~2,'0D:~2,'0D" hh mm ss)))
 
-(export 'utime->date-time)
-
 (defun utime->date-time (utime)
   (list (utime->date utime)
 	(utime->time utime)))
-
-(export 'table-to-org )
 
 (defun table-to-org (table &optional (stream t))
   "@b(Описание:) table-to-org экспортирует таблицу в формат Org.
