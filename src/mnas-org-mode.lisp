@@ -21,7 +21,9 @@
            table-cell-by-header
            table-col-names
            table-row-names
-           ))
+           )
+  (:export table-of-files)
+  )
 
 (in-package :mnas-org-mode)
 
@@ -246,3 +248,28 @@
 
 (defun table-row-names (table)
   (loop :for row :in table :collect (first row)))
+
+(defun table-of-files (dir mask)
+  "  @b(Описание:) функция @b(table-of-files) возвращает список
+  файлов из каталога @b(dir), с именами, соответствующими маске
+  @b(mask), в формате пригодном для вставки в документ org.
+
+ @b(Пример использования:)
+@begin[lang=lisp](code)
+ (table-of-files
+ \"//n142012/home/_avpete/Работа в Виннице/ДА32/Испытания сентябрь 2021 (шестая сборка)/Протоколы испытаний ДА32Л №1 сборка 6/21.09.21\"
+ \"*.pdf\")
+@end(code) "
+  (loop :for i :in (directory (concatenate 'string  dir "/" mask))
+      :collect
+      (list (concatenate 'string "[["
+                   (namestring i) "]["
+                   (concatenate 'string
+                                (pathname-name i)
+                                "."
+                                (pathname-type i))
+                   "]]"))))
+
+
+
+
