@@ -262,14 +262,10 @@
 @end(code) "
   (loop :for i :in (directory (concatenate 'string  dir "/" mask))
       :collect
-      (list (concatenate 'string "[["
-                   (namestring i) "]["
+      (list (concatenate 'string "[[" (namestring i) "]"
+                         "[="
                    (concatenate 'string
                                 (pathname-name i)
                                 "."
                                 (pathname-type i))
-                   "]]"))))
-
-
-
-
+                   "=]]"))))
