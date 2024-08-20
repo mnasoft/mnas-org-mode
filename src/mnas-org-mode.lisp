@@ -22,7 +22,9 @@
            table-col-names
            table-row-names
            )
-  (:export table-of-files)
+  (:export table-of-files
+           list-of-files
+           )
   )
 
 (in-package :mnas-org-mode)
@@ -249,7 +251,7 @@
 (defun table-row-names (table)
   (loop :for row :in table :collect (first row)))
 
-(defun table-of-files (dir mask &key (full-path nil))
+(defun table-of-files (dir mask &key (full-path nil) (link t))
   "  @b(Описание:) функция @b(table-of-files) возвращает список
   файлов из каталога @b(dir), с именами, соответствующими маске
   @b(mask), в формате пригодном для вставки в документ org.
@@ -263,10 +265,19 @@
   (loop :for i :in (directory (concatenate 'string  dir "/" mask))
         :collect
         (list
-         (if full-path 
-             (concatenate 'string "[[" (namestring i) "]]")
-             (concatenate 'string "[[" (namestring i) "]"
-                          "[=" (pathname-name i) "." (pathname-type i) "=]]")))))
+         (cond
+           ((and full-path link)
+            (concatenate
+             'string
+             "[[" (namestring i) "]]"))
+           ((and (null full-path) link)
+            (concatenate
+             'string
+             "[[" (namestring i) "]" "[=" (pathname-name i) "." (pathname-type i) "=]]"))
+           ((and (null link))
+            (concatenate
+             'string "=" (ppcre:regex-replace-all "/" (namestring i) "\\") "="))))))
+
 
 (defun table-of-files (dir mask &key (full-path nil) (link t))
   "  @b(Описание:) функция @b(table-of-files) возвращает список
@@ -295,3 +306,5 @@
             (concatenate
              'string "=" (ppcre:regex-replace-all "/" (namestring i) "\\") "="))))))
 
+(defun list-of-files (dir mask)
+  (directory (concatenate 'string  dir "/" mask)))
