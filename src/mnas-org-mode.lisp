@@ -229,7 +229,7 @@
  |5|6|7|
 @end(code)
 "
-  (format stream "~{~{|~S~}|~%~}" table))
+  (format stream "~{~{|~F~}|~%~}" table))
 
 (defun table-col-by-header (col-name table)
   (let ((pos (position col-name  (first table) :test #'equal)))
